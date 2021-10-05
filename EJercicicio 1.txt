@@ -1,0 +1,116 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+bool Operador(char c)
+{
+    if (c == 'v' || c == '-' || c == '->' || c == '<->' || c == '^') {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+int precedencia(char c)
+{
+    if (c == '^')
+        return 5;
+    else if (c == '-')
+        return 4;
+    else if (c == '->')
+        return 3;
+    else if (c == 'v' )
+        return 2;
+    else if (c == '-')
+        return 1;
+    else
+        return -1;
+}
+
+string baseAprefijo(stack<char> s, string base)
+{
+    string prefijo;
+    reverse(base.begin(), base.end());
+
+    for (int i = 0; i < base.length(); i++) {
+        if (base[i] == '(') {
+            base[i] = ')';
+        }
+        else if (base[i] == ')') {
+            base[i] = '(';
+        }
+    }
+    for (int i = 0; i < base.length(); i++) {
+        if ((base[i] >= 'a' && base[i] <= 'z')) {
+            prefijo += base[i];
+        }
+        else if (base[i] == '(') {
+            s.push(base[i]);
+        }
+        else if (base[i] == ')') {
+            while ((s.top() != '(') && (!s.empty())) {
+                prefijo += s.top();
+                s.pop();
+            }
+
+            if (s.top() == '(') {
+                s.pop();
+            }
+        }
+        else if (Operador(base[i])) {
+            if (s.empty()) {
+                s.push(base[i]);
+            }
+            else {
+                if (precedencia(base[i]) > precedencia(s.top())) {
+                    s.push(base[i]);
+                }
+                else if ((precedencia(base[i]) == precedencia(s.top()))
+                    && (base[i] == '^')) {
+                    while ((precedencia(base[i]) == precedencia(s.top()))
+                        && (base[i] == '^')) {
+                        prefijo += s.top();
+                        s.pop();
+                    }
+                    s.push(base[i]);
+                }
+                else if (precedencia(base[i]) == precedencia(s.top())) {
+                    s.push(base[i]);
+                }
+                else {
+                    while ((!s.empty()) && (precedencia(base[i]) < precedencia(s.top()))) {
+                        prefijo += s.top();
+                        s.pop();
+                    }
+                    s.push(base[i]);
+                }
+            }
+        }
+    }
+
+    while (!s.empty()) {
+        prefijo += s.top();
+        s.pop();
+    }
+
+    reverse(prefijo.begin(), prefijo.end());
+    return prefijo;
+}
+
+int main()
+{
+
+    string base, prefijo;
+    cout << "Introduzca la expresion:" << endl;
+    cin >> base;
+    stack<char> stack;
+    prefijo = baseAprefijo(stack, base);
+    cout << endl
+        << "Prefijo: " << prefijo;
+
+    return 0;
+    
+    system("PAUSE");
+}
+//Profe, el punto es que para una formula puqueña da, el problemas es cuando se usa algo de mayor complejidad, intente hacerlo de la otra forma, pero mi cabeza exploto realmente.Ahora para llevarlo de prefijo a FORM, realmente se me complica, tenia la idea de si invertia a la hora de iterar el arreglo como invierte los terminos para hacer el orden , que hiciese lo mismo pero a  la inversa para que de ahi se pudiese llevar a form, pero no funciono.
