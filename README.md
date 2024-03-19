@@ -1,6 +1,6 @@
 - 👋 Hi, I’m @Likaeus
 - 👀 I’m interested in things related to A.I and cybersecurity also data science and machine learning
-- 🌱 I’m currently learning in PUCMM university
+- 🌱 I’m Computer Science Engineer
 - 💞️ I’m looking to collaborate on diferent kinds of projects
 - 📫 How to reach me?, Well Basically trough my email "rodriguezvarona@gmail.com"
 
